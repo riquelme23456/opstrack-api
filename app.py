@@ -31,5 +31,11 @@ def listar_tickets():
             {"id": 3, "titulo": "Erro de backup", "status": "resolvido"}
         ]
     }
+    @app.route("/sobre")
+def sobre_api():
+    return {
+        "nome": "OpsTrack API",
+        "versao": "1.0.0"
+    }
 if __name__ == "__main__":
     app.run(debug=True)
