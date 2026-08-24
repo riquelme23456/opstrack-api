@@ -22,5 +22,14 @@ def status_servico():
         "status": "online",
         "servico": "OpsTrack API"
     }
+    @app.route("/tickets")
+def listar_tickets():
+    return {
+        "tickets": [
+            {"id": 1, "titulo": "Servidor lesma", "status": "aberto"},
+            {"id": 2, "titulo": "falha ao logar", "status": "em andamento, carregando"},
+            {"id": 3, "titulo": "Erro de backup", "status": "resolvido"}
+        ]
+    }
 if __name__ == "__main__":
     app.run(debug=True)
