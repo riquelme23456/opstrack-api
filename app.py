@@ -3,39 +3,38 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route('/')
 def status():
-    return {
-        "message": "sua criação, esta vivo!"
-    }
+    return {'servico': 'OpsTrack API', 'status': 'online'}
 
 
-@app.route("/health")
-def health():
-    return {
-        "status": "ok"
-    }
+@app.route('/status')
+def health_check():
+    return {'status': 'ok'}
 
-@app.route("/status")
-def status_servico():
-    return {
-        "status": "online",
-        "servico": "OpsTrack API"
-    }
-    @app.route("/tickets")
+
+@app.route('/version')
+def version():
+    return {'version': '1.2'}
+
+
+@app.route('/tickets')
 def listar_tickets():
-    return {
-        "tickets": [
-            {"id": 1, "titulo": "Servidor lesma", "status": "aberto"},
-            {"id": 2, "titulo": "falha ao logar", "status": "em andamento, carregando"},
-            {"id": 3, "titulo": "Erro de backup", "status": "resolvido"}
-        ]
-    }
-    @app.route("/sobre")
-def sobre_api():
-    return {
-        "nome": "OpsTrack API",
-        "versao": "1.0.0"
-    }
-if __name__ == "__main__":
+    tickets_mock = [
+        {'id': 1, 'titulo': 'Impressora do 3o andar sem toner'},
+        {'id': 2, 'titulo': 'VPN caindo para usuários remotos'},
+    ]
+    return {'tickets': tickets_mock}
+
+
+@app.route('/usuarios')
+def listar_usuarios():
+    usuarios_mock = [
+        {'id': 1, 'nome': 'Fulano de Tal'},
+        {'id': 2, 'nome': 'Beltrano'},
+    ]
+    return {'usuarios': usuarios_mock}
+
+
+if __name__ == '__main__':
     app.run(debug=True)
