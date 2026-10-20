@@ -14,6 +14,13 @@ def test_status_retorna_ok(client):
     assert resposta.get_json()['status'] == 'ok'
 
 
+def test_version_retorna_versao(client):
+    resposta = client.get('/version')
+    assert resposta.status_code == 200
+    j = resposta.get_json()
+    assert j['version'] == '1.2'
+
+
 def test_tickets_retorna_lista_com_id_e_titulo(client):
     resposta = client.get('/tickets')
     tickets = resposta.get_json()['tickets']
