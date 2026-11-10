@@ -227,3 +227,77 @@ Evita versionar o ambiente virtual, caches e arquivos de cobertura.
 | `git diff` abre tela que não fecha | Apertar `q`, ou usar `git --no-pager diff` |
 | `a branch named 'feature/testes' already exists` | Usar `git checkout feature/testes` (sem `-b`) |
 | Aviso de identidade do Git no commit | `git config --global user.name "Seu Nome"` e `git config --global user.email "seu@email.com"` |
+
+## Execução da aplicação com Docker
+
+Além da execução tradicional utilizando um ambiente virtual Python, a OpsTrack API também pode ser executada por meio do Docker. Essa abordagem permite empacotar a aplicação e suas dependências em uma imagem, garantindo maior padronização do ambiente de execução.
+
+### 1. Construção da imagem
+
+Na pasta raiz do projeto, onde está localizado o `Dockerfile`, execute:
+
+```bash
+docker build -t opstrack-api:0.1.0 .
+```
+
+Esse comando realiza a construção da imagem utilizando as instruções definidas no `Dockerfile`, instalando as dependências necessárias e configurando o ambiente de execução.
+
+### 2. Inicialização do container
+
+Após a construção da imagem, execute:
+
+```bash
+docker run -d --name opstrack -p 8000:8000 opstrack-api:0.1.0
+```
+
+O parâmetro `-d` executa o container em segundo plano, enquanto `-p 8000:8000` realiza o mapeamento da porta 8000 do ambiente para a porta 8000 do container.
+
+### 3. Verificação da aplicação
+
+Para verificar se o container está ativo:
+
+```bash
+docker ps
+```
+
+Para testar a disponibilidade da API:
+
+```bash
+curl http://localhost:8000/status
+```
+
+Resposta esperada:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### 4. Monitoramento e encerramento
+
+Para consultar os registros de execução:
+
+```bash
+docker logs opstrack
+```
+
+Para interromper o container:
+
+```bash
+docker stop opstrack
+```
+
+Para removê-lo após a interrupção:
+
+```bash
+docker rm opstrack
+```
+
+### 5. Configurações de segurança e otimização
+
+A imagem utiliza Python 3.12 Slim como imagem-base, reduzindo componentes desnecessários. Também foram definidas variáveis de ambiente para otimizar a execução do Python, além da utilização do usuário não privilegiado `appuser`, evitando executar a aplicação como administrador dentro do container.
+
+O `Dockerfile` também configura um mecanismo de `HEALTHCHECK`, responsável por verificar periodicamente a disponibilidade do endpoint `/status`.
+
+O arquivo `.dockerignore` evita que arquivos desnecessários, como caches, ambientes virtuais, arquivos de configuração e testes, sejam enviados durante a construção da imagem.
